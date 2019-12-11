@@ -24,29 +24,12 @@ function calc() {
 		}
 
 	var totalValue = firstValue + qBath;
-	//alert(totalValue);
-
-			
-			// GET - запрос отправки переменной (Косячный)
-
-			// var request = new XMLHttpRequest();
-			// var url = "index.php?totalValue=" + totalValue;
-			// request.open('GET', url);
-			// request.send();
-			// request.onreadystatechange = function() {
-			// 	  if (this.readyState != 4) return;
-			// 	  if (this.status != 200) {
-			// 	    alert( 'ошибка: ' + (this.status ? this.statusText : 'запрос не удался') );
-			// 	    return;
-			// 	  }
-			// }
 
 			$.ajax({
 		        url: "calc.php?totalValue="+totalValue,
 		        method: "GET",
 		        cache: false,
 		        success: function(responseText){
-		            //alert(responseText);
 		            $('.result').html(responseText);
 		        }
 		    });		

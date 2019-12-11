@@ -28,7 +28,7 @@
 		        </select>
        
 		        <label for="s">Площадь здания (м²)</label>
-		        <input value="40" id="square" type="number" placeholder="|" name="s" required>
+		        <input id="square" type="number" placeholder="|" name="s" required>
 		        
 		
 				<input type="submit" onclick="calc()" value="Подобрать">
@@ -42,6 +42,12 @@
 			
 		
 		
+	</div>
+
+	<div class="additional wrap">
+		
+
+
 	</div>
 	</pre>
 
