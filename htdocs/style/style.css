@@ -1,0 +1,14 @@
+.form-wrap form {
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start;
+}
+
+.form-wrap input, .form-wrap select {
+	margin-bottom: 20px;
+}
+.form-wrap {
+	display: flex;
+	justify-content: space-around;
+	min-width: 80%;
+}
