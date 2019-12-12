@@ -52,6 +52,7 @@
 	</pre>
 
 	<script src="calc.js"></script>
+	<script src="mediator.js"></script>
 
 </body>
 </html>

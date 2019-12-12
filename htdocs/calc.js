@@ -19,23 +19,20 @@ function calc() {
 		firstValue = 65;
 		}else if (firstNum <= 85 ){
 		firstValue = 85;
-		} else {
-			firstValue = 85;
-		}
+	} else {
+		firstValue = 85;
+	};
 
 	var totalValue = firstValue + qBath;
+	$.ajax({
+        url: "calc.php?totalValue="+totalValue,
+        method: "GET",
+        cache: false,
+        success: function(responseText){
+            $('.result').html(responseText);
+        }
+    });		
 
-			$.ajax({
-		        url: "calc.php?totalValue="+totalValue,
-		        method: "GET",
-		        cache: false,
-		        success: function(responseText){
-		            $('.result').html(responseText);
-		        }
-		    });		
-
-				
-	 	
 }
 
 

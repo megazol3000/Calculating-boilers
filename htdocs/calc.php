@@ -1,67 +1,45 @@
 <?php
-
 	$product_code = $_GET['totalValue'];
-	$setCodes2 = 0;
-	$firstVarBoiler = 0;
-	$firstVarSensor = 0;
-	$firstVarKotel = 0;
 
-	print $product_code."<br/>";
+	// Открываем документ со сводной таблицей
+	$fileCodes = fopen("product-codes.csv", 'rt') or die("Не удалось подключть файл"); 
+	$variants = [];
+	for($i=0; $codesData = fgetcsv($fileCodes, 1000,";"); $i++) {
+		if ($codesData[1] == $product_code) 
+		array_push($variants,$codesData);
+	}
+	fclose($fileCodes); // Закрываем документ со сводной таблицей
 
-$fileCodes = fopen("product-codes.csv", 'rt') or die("Не удалось подключть файл"); // Открываем документ со сводной таблицей
+	// Открываем документ с данными товаров
+	$fileProducts = fopen("product-info.csv", 'rt') or die("Не удалось подключть файл"); 
+	for($i=0; $productData = fgetcsv($fileProducts, 1000,";"); $i++) {
 
-		for($i=0; $codesData = fgetcsv($fileCodes, 1000,";"); $i++) {
-			if ($codesData[1] == $product_code && $codesData[0] == 1) {
-				$setCodes1 = $codesData;
-			}	
-			elseif ($codesData[1] == $product_code && $codesData[0] == 2)	{
-				$setCodes2 = $codesData;
-			}	    
-		}
-			$codesArray = array( $setCodes1, $setCodes2 );
-			//print_r($codesArray);
+		$productSku = $productData[1];
+		$productOldSku = $productData[2];
+		$productType = $productData[3];
+		$productName = $productData[4];
+		$productDescripton = $productData[5];
+		$productPrice = $productData[6];
 
-fclose($fileCodes); // Закрываем документ со сводной таблицей
-
-
-
-$fileProducts = fopen("product-info.csv", 'rt') or die("Не удалось подключть файл"); // Открываем документ с данными товаров
-		for($j=0; $productData = fgetcsv($fileProducts, 1000,";"); $j++) {
-
-			if($productData[0] == $codesArray[0][1] && $productData[1] == 1 && $productData[4] == $codesArray[0][3] && $productData[2] == 1 && $productData[4] != 0) {
-				$firstVarKotel = $productData;																				
-			} elseif ($productData[0] == $codesArray[0][1] && $productData[1] == 1 && $productData[4] == $codesArray[0][4] && $productData[2] == 1  && $productData[4] != 0) {
-				$firstVarBoiler = $productData;                                                                             
-			} elseif ($productData[0] == $codesArray[0][1] && $productData[1] == 1 && $productData[4] == $codesArray[0][5] && $productData[2] == 1  && $productData[4] != 0) {
-				$firstVarSensor = $productData;
-			} elseif ($productData[0] == $codesArray[0][1] && $productData[1] == 1 && $productData[4] == $codesArray[0][6] && $productData[2] == 2  && $productData[4] != 0) {
-				$firstVarAdd1 = $productData;
-			} elseif ($productData[0] == $codesArray[0][1] && $productData[1] == 1 && $productData[4] == $codesArray[0][7] && $productData[2] == 2  && $productData[4] != 0) {
-				$firstVarAdd2 = $productData;
-			} elseif ($productData[0] == $codesArray[0][1] && $productData[1] == 1 && $productData[4] == $codesArray[0][8] && $productData[2] == 2  && $productData[4] != 0) {
-				$firstVarAdd3 = $productData;
-			} elseif ($productData[0] == $codesArray[0][1] && $productData[1] == 1 && $productData[4] == $codesArray[0][9] && $productData[2] == 2  && $productData[4] != 0) {
-				$firstVarAdd4 = $productData;
-			} elseif ($productData[0] == $codesArray[0][1] && $productData[1] == 1 && $productData[4] == $codesArray[0][10] && $productData[2] == 2  && $productData[4] != 0) {
-				$firstVarAdd5 = $productData;
-			} elseif ($productData[0] == $codesArray[0][1] && $productData[1] == 1 && $productData[4] == $codesArray[0][11] && $productData[2] == 2  && $productData[4] != 0) {
-				$firstVarAdd6 = $productData;
-			} elseif ($productData[0] == $codesArray[0][1] && $productData[1] == 1 && $productData[4] == $codesArray[0][12] && $productData[2] == 2  && $productData[4] != 0) {
-				$firstVarAdd7 = $productData;
+		for ( $i=0; count($variants) > $i; $i++ ) {
+			for ( $j=0; count($variants[$i]) > $j; $j++ ) {
+				if ( $variants[$i][$j] == $productSku) 
+				$productResult[] = array(
+					'productCode' => $variants[$i][1],
+					'variant' => $variants[$i][0],
+					'model' => $variants[$i][2],
+					'type' => $productType, 
+					'name' => $productName,
+					'description' => $productDescripton, 
+					'price' => $productPrice, 
+				);
 			}
 		}
 
+	}
+	fclose($fileProducts); // Закрываем документ с данными товаров
 
-			$firstVarBasic = array($firstVarKotel, $firstVarBoiler, $firstVarSensor);
-			//Массив основного КОТЛА, БОЙЛЕРА и ДАТЧИКА
-			$firstVarAdditions = array($firstVarAdd1, $firstVarAdd2, $firstVarAdd3, $firstVarAdd4, $firstVarAdd5, $firstVarAdd6, $firstVarAdd7);
-			//Массив доп. товаров первого варианта
-			$firstVar = array($firstVarBasic, $firstVarAdditions);
-			//Массив первого варианта - ОСНОВА + ДОПКИ
-			print_r($firstVar);
+	print_r ($productResult);
 
-
-fclose($fileProducts); // Закрываем документ с данными товаров
-
-
+	$json = json_encode($productResult, true, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_NUMERIC_CHECK);
 ?>
